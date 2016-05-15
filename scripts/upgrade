@@ -45,9 +45,9 @@ sudo chown -R www-data: "$DESTDIR"
 
 # Copy and set nginx configuration
 nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
-sed -i "s@#PATH#@${path}@g"        ../conf/nginx.conf
-sed -i "s@#LOCATION#@${path:-/}@g" ../conf/nginx.conf
-sed -i "s@#DESTDIR#@${DESTDIR}@g"  ../conf/nginx.conf
+sed -i "s@{PATH}@${path}@g"        ../conf/nginx.conf
+sed -i "s@{LOCATION}@${path:-/}@g" ../conf/nginx.conf
+sed -i "s@{DESTDIR}@${DESTDIR}@g"  ../conf/nginx.conf
 sudo cp ../conf/nginx.conf "$nginx_conf"
 
 # Set SSOwat rules
