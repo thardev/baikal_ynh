@@ -1,19 +1,22 @@
 #!/bin/bash
 
-set -u
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# Retrieve app id
+app=$YNH_APP_INSTANCE_NAME
 
 # Load common variables and helpers
 . ./_common.sh
 
-# Set app specific variables
-app=${!#}
-dbname=$app
-dbuser=$app
-
-# Retrieve arguments
+# Retrieve app settings
 domain=$(ynh_app_setting_get "$app" domain)
 path=$(ynh_app_setting_get "$app" path)
 path=${path%/}
+
+# Set app specific variables
+dbname=$app
+dbuser=$app
 
 # Check destination directory
 DESTDIR="/var/www/$app"

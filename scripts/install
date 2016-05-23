@@ -1,15 +1,18 @@
 #!/bin/bash
 
-set -e
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# Retrieve app id
+app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 domain=$1
 path=${2%/}
 password=$3
-app=${!#}
 
 # Load common variables and helpers
-source ./_common.sh
+. ./_common.sh
 
 # Set app specific variables
 dbname=$app
