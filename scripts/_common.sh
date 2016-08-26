@@ -3,10 +3,10 @@
 #
 
 # Baikal version
-VERSION=0.4.4
+VERSION=0.4.6
 
 # Baikal source archive checksum
-BAIKAL_SOURCE_SHA256="cced612353862bce532ed458eda0675b5e1e5790f92969bf13992c6567943efc"
+BAIKAL_SOURCE_SHA256="946e8e4161f7ef84be42430b6e9d3bb7dd4bbbe241b409be208c14447d7aa7a6"
 
 # Remote URL to fetch Baikal source archive
 BAIKAL_SOURCE_URL="https://github.com/fruux/Baikal/releases/download/${VERSION}/baikal-${VERSION}.zip"
