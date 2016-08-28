@@ -4,7 +4,7 @@ Baïkal for YunoHost
 [Baïkal](http://baikal-server.com/) is a CalDAV and CardDAV server, based on
 sabre/dav, that includes an administration interface for easy management.
 
-**Shipped version:** 0.4.4
+**Shipped version:** 0.4.6
 
 ## Features
 
