@@ -31,8 +31,8 @@ extract_baikal "$TMPDIR"
 # Get Specific folder from current installation
 # FIXME: config.php and config.system.php are not updated with possible
 # new or changed configurations
-rm -rf "${TMPDIR}/Specific"
-sudo cp -r "${DESTDIR}/Specific" "$TMPDIR"
+rm -rf "${TMPDIR}/Specific/*"
+sudo cp -r "${DESTDIR}/Specific/"{config.php,config.system.php} "$TMPDIR/Specific"
 sudo chown -hR "${USER}" "${TMPDIR}/Specific"
 
 # Run Baikal upgrade from tmp directory
@@ -42,9 +42,20 @@ php "${TMPDIR}/bin/upgrade.sh" \
         "https://${domain}${path}/admin/install"
 
 # Install new app and set permissions
+if ! id -u $app > /dev/null 2>&1 ; then
+  sudo useradd -c "$app system account" \
+    -d /var/www/$app --system --user-group $app --shell /usr/sbin/nologin \
+    || ynh_die "Unable to create $app system account"
+fi
 sudo rm -rf "$DESTDIR"
 sudo mv "$TMPDIR" "$DESTDIR"
-sudo chown -R www-data: "$DESTDIR"
+sudo chown -hR root: "$DESTDIR"
+sudo chown $app:root "$DESTDIR/Specific/"{config.php,config.system.php}
+sudo chmod 640 "$DESTDIR/Specific/"{config.php,config.system.php}
+
+# Cleanup old baikal-admin sessions
+# since we may have changed owner of the session file
+sudo grep -lr "CSRF_TOKEN|s:" /var/lib/php5/sessions | xargs sudo rm
 
 # Copy and set nginx configuration
 nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
@@ -58,6 +69,8 @@ sudo cp ../conf/nginx.conf "$nginx_conf"
 phpfpm_conf="/etc/php5/fpm/pool.d/${app}.conf"
 sed -i "s@{POOLNAME}@${app}@g"     ../conf/php-fpm.conf
 sed -i "s@{DESTDIR}@${DESTDIR}/@g" ../conf/php-fpm.conf
+sed -i "s@{USER}@${app}@g" ../conf/php-fpm.conf
+sed -i "s@{GROUP}@${app}@g" ../conf/php-fpm.conf
 sudo cp ../conf/php-fpm.conf "$phpfpm_conf"
 
 # Set SSOwat rules

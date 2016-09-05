@@ -40,7 +40,14 @@ phpfpm_conf="/etc/php5/fpm/pool.d/${app}.conf"
 
 # Restore the app files and set permissions
 sudo cp -a ./sources "$DESTDIR"
-sudo chown -R www-data: "$DESTDIR"
+if ! id -u $app > /dev/null 2>&1 ; then
+  sudo useradd -c "$app system account" \
+    -d /var/www/$app --system --user-group $app --shell /usr/sbin/nologin \
+    || ynh_die "Unable to create $app system account"
+fi
+sudo chown -hR root: "$DESTDIR"
+sudo chown $app:root "$DESTDIR/Specific/"{config.php,config.system.php}
+sudo chmod 640 "$DESTDIR/Specific/"{config.php,config.system.php}
 
 # Create and restore the database
 ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"

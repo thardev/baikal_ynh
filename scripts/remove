@@ -25,3 +25,9 @@ sudo rm -f "/etc/php5/fpm/pool.d/${app}.conf"
 # Reload services
 sudo service php5-fpm restart || true
 sudo service nginx reload || true
+
+# Remove the user account
+# (must be done after php-fpm restart)
+id "$app" >/dev/null 2>&1 \
+  && sudo deluser --quiet --remove-home "$app" >/dev/null \
+  || true

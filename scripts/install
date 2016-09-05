@@ -62,8 +62,13 @@ sed -i "s@#DESKEY#@${deskey}@g" "$bk_conf"
 touch "${TMPDIR}/Specific/INSTALL_DISABLED"
 
 # Install files and set permissions
+sudo useradd -c "$app system account" \
+  -d /var/www/$app --system --user-group $app --shell /usr/sbin/nologin \
+  || ynh_die "Unable to create $app system account"
 sudo mv "$TMPDIR" "$DESTDIR"
-sudo chown -R www-data: "$DESTDIR"
+sudo chown -hR root: "$DESTDIR"
+sudo chown $app:root "$DESTDIR/Specific/"{config.php,config.system.php}
+sudo chmod 640 "$DESTDIR/Specific/"{config.php,config.system.php}
 
 # Copy and set nginx configuration
 nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
@@ -77,6 +82,8 @@ sudo cp ../conf/nginx.conf "$nginx_conf"
 phpfpm_conf="/etc/php5/fpm/pool.d/${app}.conf"
 sed -i "s@{POOLNAME}@${app}@g"     ../conf/php-fpm.conf
 sed -i "s@{DESTDIR}@${DESTDIR}/@g" ../conf/php-fpm.conf
+sed -i "s@{USER}@${app}@g" ../conf/php-fpm.conf
+sed -i "s@{GROUP}@${app}@g" ../conf/php-fpm.conf
 sudo cp ../conf/php-fpm.conf "$phpfpm_conf"
 
 # Save app settings
