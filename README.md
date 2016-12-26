@@ -19,6 +19,5 @@ this package:
 
 ## Links
 
- * Report a bug: https://dev.yunohost.org/projects/apps/issues
  * Baïkal website: http://baikal-server.com/
  * YunoHost website: https://yunohost.org/
