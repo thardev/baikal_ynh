@@ -6,7 +6,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
+#source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -117,7 +117,7 @@ bk_conf="${final_path}/Specific/config.system.php"
 ynh_backup_if_checksum_is_different "$bk_conf"
 cp ../conf/config.system.php "$bk_conf"
 
-ynh_replace_string "#PATH#" "$path_url"     "$bk_conf"
+ynh_replace_string "#PATH#" "$path_url" "$bk_conf"
 ynh_replace_string "#DBNAME#" "$db_name" "$bk_conf"
 ynh_replace_string "#DBUSER#" "$db_name" "$bk_conf"
 db_pwd=$(ynh_app_setting_get $app mysqlpwd)
