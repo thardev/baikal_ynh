@@ -55,7 +55,7 @@ sudo chmod 640 "$DESTDIR/Specific/"{config.php,config.system.php}
 
 # Cleanup old baikal-admin sessions
 # since we may have changed owner of the session file
-sudo grep -lr "CSRF_TOKEN|s:" /var/lib/php5/sessions | xargs sudo rm
+sudo grep -lr "CSRF_TOKEN|s:" /var/lib/php5/sessions | xargs -r sudo rm
 
 # Copy and set nginx configuration
 nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
